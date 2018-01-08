@@ -1,0 +1,59 @@
+	<style>
+		<!--map-->
+		#map_container{
+  position: relative;
+}
+.map{
+    height: 0;
+    overflow: hidden;
+    padding-bottom: 22.25%;
+    padding-top: 30px;
+    position: relative;
+}
+b{
+font-family:Felix Titling;font-size:18px;	
+}
+#loader {
+}
+
+/* Add animation to "page content" */
+.animate-bottom {
+  position: relative;
+  -webkit-animation-name: animatebottom;
+  -webkit-animation-duration: 1s;
+  animation-name: animatebottom;
+  animation-duration: 1s
+}
+
+@-webkit-keyframes animatebottom {
+  from { bottom:-100px; opacity:0 } 
+  to { bottom:0px; opacity:1 }
+}
+
+@keyframes animatebottom { 
+  from{ bottom:-100px; opacity:0 } 
+  to{ bottom:0; opacity:1 }
+}
+
+#myDiv {
+  display: none;
+}
+
+.flex-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 500px;
+  
+}
+
+.flex-container>div {
+  color: white;
+  width: 100px;
+  height: 100px;
+}
+.body{
+background-color:red;
+}
+		</style>
+	

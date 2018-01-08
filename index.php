@@ -1,0 +1,237 @@
+
+<html lang="en">
+	<head>
+		<title>HussainMaps</title>
+		<link rel="icon" type="image/jpg" href="img/glo.jpg">
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+		<link rel="stylesheet" href="css/map.css">
+		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+		 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
+
+		<!-- <link rel="stylesheet" href="materialize/css/materialize.min.css"> -->
+		<!-- <script src="materialize/js/materialize.min.js"></script> -->
+		<style>
+		.w3-spin {
+    animation: w3-spin 0.8s infinite linear;
+}
+		</style>
+	</head>
+	<body  onload="myFunction()" onpageshow="GetRoute()"style="margin:0;">
+	
+
+<center><div class="flex-container" id="loader">
+  <div>
+  
+  
+  <img src="img/151.gif" class="img-responsive" width="100" height="100">
+  
+
+</div>
+
+</div></center>
+
+	
+   <div style="display:none;" id="myDiv" class="animate-bottom">
+		
+
+<nav class="navbar navbar-inverse" >
+  <div class="container">
+    <div class="navbar-header" style="height:100px">
+	<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+        
+      <i class="fa fa-chrome w3-spin" style="font-size:25px;color:#fff"></i>                      
+      </button>
+    
+      <a class="navbar-brand" href="#"><img src="img/9.gif" onclick="GetRoute()" class="img-circle img-responsive" ><font color="#fff">My Maps</font></a>
+    
+	</div>
+	 <div class="collapse navbar-collapse" id="myNavbar">
+	<br>
+    <div class="navbar-form navbar-right" >
+      <div class="form-group">
+        <i style="color:#fff;" class="material-icons prefix">gps_not_fixed</i>
+       <label style="color:#fff">Source</label> <input type="text" class="form-control" placeholder="Source" name="search" id="txtSource"  data-live-search="true" data-width="75%">
+      </div>
+      <div class="form-group">
+        <i style="color:#fff;" class="material-icons prefix">place</i>
+       <label style="color:#fff">Destination</label> <input type="text" class="form-control" placeholder="Destination" name="search" id="txtDestination"  data-live-search="true" data-width="75%">
+      </div>
+      <button type="button" class="btn btn-info" onclick="GetRoute()" data-toggle="collapse" data-target="#myNavbar">
+      <span class="glyphicon glyphicon-search"></span> Get Route
+    </button>
+
+    </div>
+  </div></div>
+</nav>
+
+					<p id="mal" class="bg-success" style=""></p>
+						<div id="dvDistance" class="bg-success"></div>
+			
+<div class="row">	<div class="col-sm-12">		<div id="dvMap" onload="GetRoute()" class="map container img-responsive" style="width: 100%; height: 500px"></div></div>
+						
+</div>
+<footer class="container-fluid text-center">
+  <b>© 2018 My Maps.All Rights are Reserved By Hussain</b>
+</footer>
+
+
+	
+</div>
+
+
+
+
+<script>
+var myVar;
+
+function myFunction() {
+    myVar = setTimeout(showPage, 2000);
+	
+}
+
+function showPage() {
+  document.getElementById("loader").style.display = "none";
+  document.getElementById("myDiv").style.display = "block";
+}
+
+</script>
+    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
+ 
+ <script type="text/javascript">
+        var source, destination;
+        var directionsDisplay;
+        var directionsService = new google.maps.DirectionsService();
+        google.maps.event.addDomListener(window, 'load', function () {
+            new google.maps.places.SearchBox(document.getElementById('txtSource'));
+            new google.maps.places.SearchBox(document.getElementById('txtDestination'));
+            directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': true });
+        });
+
+        function GetRoute() {
+            var mumbai = new google.maps.LatLng(18.9750, 72.8258);
+            var mapOptions = {
+                zoom: 7,
+				
+			mapTypeId:google.maps.MapTypeId.HYBRID,
+                center: mumbai
+            };
+            map = new google.maps.Map(document.getElementById('dvMap'), mapOptions);
+            directionsDisplay.setMap(map);
+            directionsDisplay.setPanel(document.getElementById('dvPanel'));
+
+            //*********DIRECTIONS AND ROUTE**********************//
+            source = document.getElementById("txtSource").value;
+            destination = document.getElementById("txtDestination").value;
+
+            var request = {
+                origin: source,
+                destination: destination,
+                travelMode: google.maps.TravelMode.DRIVING
+            };
+            directionsService.route(request, function (response, status) {
+                if (status == google.maps.DirectionsStatus.OK) {
+                    directionsDisplay.setDirections(response);
+                }
+            });
+
+            //*********DISTANCE AND DURATION**********************//
+            var service = new google.maps.DistanceMatrixService();
+            service.getDistanceMatrix({
+                origins: [source],
+                destinations: [destination],
+                travelMode: google.maps.TravelMode.DRIVING,
+                unitSystem: google.maps.UnitSystem.METRIC,
+                avoidHighways: false,
+                avoidTolls: false
+            }, function (response, status) {
+                if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
+                    var distance = response.rows[0].elements[0].distance.text;
+                    var duration = response.rows[0].elements[0].duration.text;
+					var total =  Number(distance) * 2 ;
+                    var dvDistance = document.getElementById("dvDistance");
+                    dvDistance.innerHTML = "";
+                    dvDistance.innerHTML += "<center><b>Distance&nbsp;:&nbsp;&nbsp;" + distance  + "<br /></b></center>";
+                    dvDistance.innerHTML += "<center><b>Duration&nbsp;:&nbsp;&nbsp;" + duration +"<br/><b></center>";
+					
+					
+				} else {
+                    alert("Unable to find the distance via road.");
+                }
+            });
+        }
+		
+    </script>
+	<script>
+		function mul()
+		{
+		var duration = response.rows[0].elements[0].duration.text;
+		var y=2;
+		var z = distance * y;
+		document.getElementById("demo").innerHTML = z;
+		}
+		</script>
+		<script>
+		$( document ).ready( function() {
+
+		$('body').noisy({
+			intensity: 0.2,
+			size: 200,
+			opacity: 0.28,
+			randomColors: false, // true by default
+			color: '#000000'
+		});
+	  
+		//Google Maps JS
+		//Set Map
+		function initialize() {
+				var myLatlng = new google.maps.LatLng(53.3333,-3.08333);
+				var imagePath = 'http://m.schuepfen.ch/icons/helveticons/black/60/Pin-location.png'
+				var mapOptions = {
+					zoom: 16,
+					center: myLatlng,
+					mapTypeId: google.maps.MapTypeId.ROADMAP
+				}
+
+			var map = new google.maps.Map(document.getElementById('map'), mapOptions);
+			//Callout Content
+			var contentString = 'Some address here..';
+			//Set window width + content
+			var infowindow = new google.maps.InfoWindow({
+				content: contentString,
+				maxWidth: 500
+			});
+
+			//Add Marker
+			var marker = new google.maps.Marker({
+				position: myLatlng,
+				map: map,
+				icon: imagePath,
+				title: 'image title'
+			});
+
+			google.maps.event.addListener(marker, 'click', function() {
+				infowindow.open(map,marker);
+			});
+
+			//Resize Function
+			google.maps.event.addDomListener(window, "resize", function() {
+				var center = map.getCenter();
+				google.maps.event.trigger(map, "resize");
+				map.setCenter(center);
+			});
+		}
+
+		google.maps.event.addDomListener(window, 'load', initialize);
+
+	});
+	</script>
+	
+    
+</body>
+</html>
