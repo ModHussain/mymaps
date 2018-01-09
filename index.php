@@ -5,24 +5,26 @@
 		<link rel="icon" type="image/jpg" href="img/glo.jpg">
 		<meta charset="utf-8">
 		<meta name="viewport" content="width=device-width, initial-scale=1">
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-		<link rel="stylesheet" href="css/map.css">
-		<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
 		<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
-	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+		<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+		
+		<link rel="stylesheet" href="css/map.css">
+		
+	<script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
 
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 		 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> 
-
-		<!-- <link rel="stylesheet" href="materialize/css/materialize.min.css"> -->
-		<!-- <script src="materialize/js/materialize.min.js"></script> -->
+		<script src="//maps.googleapis.com/maps/api/js?key=AIzaSyB5bh-Wqv3OCmSSHW3vC81FmnlNC0huEVA&sensor=false&libraries=places" type="text/javascript"></script>	
 		<style>
-		.w3-spin {
-    animation: w3-spin 0.8s infinite linear;
-}
+			.w3-spin {
+			animation: w3-spin 0.8s infinite linear;
+			}
 		</style>
 	</head>
-	<body  onload="myFunction()" onpageshow="GetRoute()"style="margin:0;">
+	<body  onload="myFunction()" onpageshow="get_rout()"style="margin:0;">
 	
 
 <center><div class="flex-container" id="loader">
@@ -48,7 +50,7 @@
       <i class="fa fa-chrome w3-spin" style="font-size:25px;color:#fff"></i>                      
       </button>
     
-      <a class="navbar-brand" href="#"><img src="img/9.gif" onclick="GetRoute()" class="img-circle img-responsive" ><font color="#fff">My Maps</font></a>
+      <a class="navbar-brand" href="#"><img src="img/9.gif" onclick="get_rout()" class="img-circle img-responsive" ><font color="#fff">My Maps</font></a>
     
 	</div>
 	 <div class="collapse navbar-collapse" id="myNavbar">
@@ -56,13 +58,13 @@
     <div class="navbar-form navbar-right" >
       <div class="form-group">
         <i style="color:#fff;" class="material-icons prefix">gps_not_fixed</i>
-       <label style="color:#fff">Source</label> <input type="text" class="form-control" placeholder="Source" name="search" id="txtSource"  data-live-search="true" data-width="75%">
+       <label style="color:#fff">Source</label> <input type="text" class="form-control" placeholder="Source" name="search" id="source"  data-live-search="true" data-width="75%">
       </div>
       <div class="form-group">
         <i style="color:#fff;" class="material-icons prefix">place</i>
-       <label style="color:#fff">Destination</label> <input type="text" class="form-control" placeholder="Destination" name="search" id="txtDestination"  data-live-search="true" data-width="75%">
+       <label style="color:#fff">Destination</label> <input type="text" class="form-control" placeholder="Destination" name="search" id="destination"  data-live-search="true" data-width="75%">
       </div>
-      <button type="button" class="btn btn-info" onclick="GetRoute()" data-toggle="collapse" data-target="#myNavbar">
+      <button type="button" class="btn btn-info" onclick="get_rout()" data-toggle="collapse" data-target="#myNavbar">
       <span class="glyphicon glyphicon-search"></span> Get Route
     </button>
 
@@ -72,9 +74,11 @@
 
 					<p id="mal" class="bg-success" style=""></p>
 						<div id="dvDistance" class="bg-success"></div>
+				
 			
-<div class="row">	<div class="col-sm-12">		<div id="dvMap" onload="GetRoute()" class="map container img-responsive" style="width: 100%; height: 500px"></div></div>
-						
+<div class="row">	<div class="col-sm-12">		<div id="maplocation" onload="get_rout()" class="map container img-responsive" style="width: 100%; height: 500px"></div>
+
+</div>
 </div>
 <footer class="container-fluid text-center">
   <b>© 2018 My Maps.All Rights are Reserved By Hussain</b>
@@ -101,33 +105,33 @@ function showPage() {
 }
 
 </script>
-    <script type="text/javascript" src="http://maps.googleapis.com/maps/api/js?sensor=false&libraries=places"></script>
- 
- <script type="text/javascript">
+<script type="text/javascript">
         var source, destination;
-        var directionsDisplay;
-        var directionsService = new google.maps.DirectionsService();
+        var darection = new google.maps.DirectionsRenderer;
+        var directionsService = new google.maps.DirectionsService;
         google.maps.event.addDomListener(window, 'load', function () {
-            new google.maps.places.SearchBox(document.getElementById('txtSource'));
-            new google.maps.places.SearchBox(document.getElementById('txtDestination'));
-            directionsDisplay = new google.maps.DirectionsRenderer({ 'draggable': true });
+            new google.maps.places.SearchBox(document.getElementById('source'));
+            new google.maps.places.SearchBox(document.getElementById('destination'));
+            
         });
 
-        function GetRoute() {
-            var mumbai = new google.maps.LatLng(18.9750, 72.8258);
+        function get_rout() {
+
+
+            var india = new google.maps.LatLng(21.792657, 78.618164);
             var mapOptions = {
-                zoom: 7,
+                zoom: 5,
 				
 			mapTypeId:google.maps.MapTypeId.HYBRID,
-                center: mumbai
+                center: india
             };
-            map = new google.maps.Map(document.getElementById('dvMap'), mapOptions);
-            directionsDisplay.setMap(map);
-            directionsDisplay.setPanel(document.getElementById('dvPanel'));
+            map = new google.maps.Map(document.getElementById('maplocation'), mapOptions);
+            darection.setMap(map);
+            darection.setPanel(document.getElementById('panallocation'));
 
-            //*********DIRECTIONS AND ROUTE**********************//
-            source = document.getElementById("txtSource").value;
-            destination = document.getElementById("txtDestination").value;
+
+            source = document.getElementById("source").value;
+            destination = document.getElementById("destination").value;
 
             var request = {
                 origin: source,
@@ -136,11 +140,12 @@ function showPage() {
             };
             directionsService.route(request, function (response, status) {
                 if (status == google.maps.DirectionsStatus.OK) {
-                    directionsDisplay.setDirections(response);
+                    darection.setDirections(response);
                 }
             });
 
-            //*********DISTANCE AND DURATION**********************//
+
+            
             var service = new google.maps.DistanceMatrixService();
             service.getDistanceMatrix({
                 origins: [source],
@@ -153,84 +158,24 @@ function showPage() {
                 if (status == google.maps.DistanceMatrixStatus.OK && response.rows[0].elements[0].status != "ZERO_RESULTS") {
                     var distance = response.rows[0].elements[0].distance.text;
                     var duration = response.rows[0].elements[0].duration.text;
-					var total =  Number(distance) * 2 ;
+                    
                     var dvDistance = document.getElementById("dvDistance");
                     dvDistance.innerHTML = "";
                     dvDistance.innerHTML += "<center><b>Distance&nbsp;:&nbsp;&nbsp;" + distance  + "<br /></b></center>";
                     dvDistance.innerHTML += "<center><b>Duration&nbsp;:&nbsp;&nbsp;" + duration +"<br/><b></center>";
 					
-					
-				} else {
+                    
+                    
+                } else {
                     alert("Unable to find the distance via road.");
                 }
             });
         }
-		
+        
+        
+        
+        
     </script>
-	<script>
-		function mul()
-		{
-		var duration = response.rows[0].elements[0].duration.text;
-		var y=2;
-		var z = distance * y;
-		document.getElementById("demo").innerHTML = z;
-		}
-		</script>
-		<script>
-		$( document ).ready( function() {
-
-		$('body').noisy({
-			intensity: 0.2,
-			size: 200,
-			opacity: 0.28,
-			randomColors: false, // true by default
-			color: '#000000'
-		});
-	  
-		//Google Maps JS
-		//Set Map
-		function initialize() {
-				var myLatlng = new google.maps.LatLng(53.3333,-3.08333);
-				var imagePath = 'http://m.schuepfen.ch/icons/helveticons/black/60/Pin-location.png'
-				var mapOptions = {
-					zoom: 16,
-					center: myLatlng,
-					mapTypeId: google.maps.MapTypeId.ROADMAP
-				}
-
-			var map = new google.maps.Map(document.getElementById('map'), mapOptions);
-			//Callout Content
-			var contentString = 'Some address here..';
-			//Set window width + content
-			var infowindow = new google.maps.InfoWindow({
-				content: contentString,
-				maxWidth: 500
-			});
-
-			//Add Marker
-			var marker = new google.maps.Marker({
-				position: myLatlng,
-				map: map,
-				icon: imagePath,
-				title: 'image title'
-			});
-
-			google.maps.event.addListener(marker, 'click', function() {
-				infowindow.open(map,marker);
-			});
-
-			//Resize Function
-			google.maps.event.addDomListener(window, "resize", function() {
-				var center = map.getCenter();
-				google.maps.event.trigger(map, "resize");
-				map.setCenter(center);
-			});
-		}
-
-		google.maps.event.addDomListener(window, 'load', initialize);
-
-	});
-	</script>
 	
     
 </body>
